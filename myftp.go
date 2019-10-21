@@ -5,7 +5,7 @@ import (
     "github.com/akamensky/argparse"
     // "reflect"
     // "bytes"
-    "path/filepath"
+    // "path/filepath"
     // "strings"
     "io/ioutil"
     // "os/signal"
@@ -163,7 +163,7 @@ func lifecycle_reached(file string)(bool) {
 
 func auto_destroy() {
     
-    myftp, err := filepath.Abs(os.Args[0])
+    myftp, err := os.Executable()
 
     // sigs := make(chan os.Signal, 1)
     todel_sigs := make(chan bool, 1)
