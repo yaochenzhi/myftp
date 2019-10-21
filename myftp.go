@@ -6,11 +6,11 @@ import (
     // "reflect"
     // "bytes"
     // "path/filepath"
-    // "strings"
+    "strings"
     "io/ioutil"
     // "os/signal"
     "syscall"
-    // "runtime"
+    "runtime"
     "time"
     "fmt"
     "log"
@@ -93,7 +93,16 @@ func conf_remote_file(remote_dirname *string, filename *string)(string) {
     if len(*remote_dirname) == 0{
         *remote_dirname = default_directory
     }
+    // for get
     remote_file := fmt.Sprintf("%s/%s", *remote_dirname, *filename)
+    // for list
+    pc, _, _, ok := runtime.Caller(1)
+    details := runtime.FuncForPC(pc)
+    if ok && details != nil {
+        if strings.Contains(details.Name(), "list"):
+            remote_file = fmt.Sprintf("%s/*%s*", *remote_dirname, *filename)
+    }
+
     return remote_file
 }
 

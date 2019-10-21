@@ -4,6 +4,8 @@ import (
     "github.com/jlaffaye/ftp"
     "github.com/akamensky/argparse"
     "io/ioutil"
+    "strings"
+    "runtime"
     "fmt"
     "log"
     "os"
@@ -68,13 +70,23 @@ func conf_server_auth(s *string, u *string, p *string){
     if *p == ""{*p=default_password}
 }
 
+
 func conf_remote_file(remote_dirname *string, filename *string)(string) {
     // string "dir/file" representing abs file path on the server
     // only available for ftp {get/list} method but NOT for ftp {put} method
     if len(*remote_dirname) == 0{
         *remote_dirname = default_directory
     }
+    // for get
     remote_file := fmt.Sprintf("%s/%s", *remote_dirname, *filename)
+    // for list
+    pc, _, _, ok := runtime.Caller(1)
+    details := runtime.FuncForPC(pc)
+    if ok && details != nil {
+        if strings.Contains(details.Name(), "list"):
+            remote_file = fmt.Sprintf("%s/*%s*", *remote_dirname, *filename)
+    }
+
     return remote_file
 }
 
