@@ -99,8 +99,9 @@ func conf_remote_file(remote_dirname *string, filename *string)(string) {
     pc, _, _, ok := runtime.Caller(1)
     details := runtime.FuncForPC(pc)
     if ok && details != nil {
-        if strings.Contains(details.Name(), "list"):
+        if strings.Contains(details.Name(), "list"){
             remote_file = fmt.Sprintf("%s/*%s*", *remote_dirname, *filename)
+        }
     }
 
     return remote_file
